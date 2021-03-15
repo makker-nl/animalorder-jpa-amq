@@ -14,6 +14,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import org.apache.camel.Body;
+import org.apache.camel.component.jpa.Consumed;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,6 +49,9 @@ public class Shipment implements Serializable {
 
 	@JsonProperty
 	private boolean shipped;
+	
+	@JsonProperty
+	private String description;
 
 	public Integer getId() {
 		return id;
@@ -81,9 +85,24 @@ public class Shipment implements Serializable {
 		this.shipped = shipped;
 	}
 	
-	public void setShippedTrue(@Body Shipment shipment) {
-		shipment.setShipped(true);
+
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	@Consumed	
+	public void setShipped() {
+		this.setShipped(true);
+	}
+	
+	public void registerOrderShipped(@Body Shipment shipment) {		
 		shipment.setShipDate(LocalDate.now());
+		shipment.setDescription("This order is shipped on: "+shipment.getShipDate());
 	}
  
 
