@@ -3,4 +3,5 @@ target/
 .settings/
 .classpath
 .project
-application-amq-openshift.properties"
+application-amq-openshift.properties
+amq-client.p12
