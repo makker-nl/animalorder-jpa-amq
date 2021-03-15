@@ -96,7 +96,7 @@ public class Shipment implements Serializable {
 	}
 
 	@Consumed	
-	public void setShipped() {
+	public void setShippedTrue() {
 		this.setShipped(true);
 	}
 	
