@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="        http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       https://camel.apache.org/schema/spring/camel-spring.xsd">
+
+
+
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+		<property name="configuration" ref="jmsConfig"/>
+	</bean>
+
+	<bean id="jmsConfig" class="org.apache.camel.component.jms.JmsConfiguration">
+		<property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
+		<property name="transacted" value="true"/>
+		<property name="deliveryPersistent" value="true"/>
+		<property name="requestTimeout" value="${jmsBroker.jmsRequestTimeout}"/>
+		<property name="transactionManager" ref="jmsTransactionManager"/>
+		<property name="cacheLevelName" value="CACHE_CONSUMER"/>
+	</bean>
+
+	<bean id="jmsTransactionManager" class="org.springframework.jms.connection.JmsTransactionManager">
+		<property name="connectionFactory" ref="jmsPooledConnectionFactory"/>
+	</bean>
+
+	<bean id="jmsPooledConnectionFactory" class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+		<property name="maxConnections" value="${jmsBroker.jmsMaxConnections}"/>
+		<property name="maximumActiveSessionPerConnection" value="${jmsBroker.jmsMaximumActiveSessionPerConnection}"/>
+		<property name="connectionFactory" ref="${jmsBroker.jmsConnectionFactory}"/>
+	</bean>
+
+	<bean id="jmsConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="${jmsBroker.brokerURL}"/>
+		<property name="watchTopicAdvisories" value="false"/>
+	</bean>
+
+	<bean id="jmsSecureConnectionFactory" class="org.apache.activemq.ActiveMQSslConnectionFactory">
+		<property name="brokerURL" value="${jmsBroker.brokerURL}"/>
+		<property name="watchTopicAdvisories" value="false"/>
+		<property name="trustStore" value="${jmsBroker.trustStore}"/>
+		<property name="trustStorePassword" value="${jmsBroker.trustStorePassword}"/>
+	</bean>
+</beans>
