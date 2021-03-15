@@ -25,9 +25,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({ "id", "order", "shipped", "shipDate" })
 @NamedQueries({
-		@NamedQuery(name = "getNotShippedOrders", query = "select s from  Shipment s where s.shipped = false")})
+		@NamedQuery(name = "getNotShippedOrders", query = "select s from  Shipment s where s.shipped = false") })
 public class Shipment implements Serializable {
- 
+
 	private static final long serialVersionUID = -2851309334577696887L;
 
 	@Id
@@ -39,8 +39,8 @@ public class Shipment implements Serializable {
 	@JoinColumn(name = "order_id", foreignKey = @ForeignKey(name = "Shipment_Order_fk_1"))
 	@JsonProperty
 	private Order order;
-	
-    @Column(name = "ship_date" )
+
+	@Column(name = "ship_date")
 	@JsonProperty
 	private LocalDate shipDate;
 
@@ -49,7 +49,7 @@ public class Shipment implements Serializable {
 
 	@JsonProperty
 	private boolean shipped;
-	
+
 	@JsonProperty
 	private String description;
 
@@ -84,8 +84,6 @@ public class Shipment implements Serializable {
 	public void setShipped(boolean shipped) {
 		this.shipped = shipped;
 	}
-	
-
 
 	public String getDescription() {
 		return description;
@@ -95,15 +93,14 @@ public class Shipment implements Serializable {
 		this.description = description;
 	}
 
-	@Consumed	
+	@Consumed
 	public void setShippedTrue() {
 		this.setShipped(true);
 	}
-	
-	public void registerOrderShipped(@Body Shipment shipment) {		
+
+	public void registerOrderShipped(@Body Shipment shipment) {
 		shipment.setShipDate(LocalDate.now());
-		shipment.setDescription("This order is shipped on: "+shipment.getShipDate());
+		shipment.setDescription("This order is shipped on: " + shipment.getShipDate());
 	}
- 
 
 }
